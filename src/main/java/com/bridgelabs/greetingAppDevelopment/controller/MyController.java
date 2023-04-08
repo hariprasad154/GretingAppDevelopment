@@ -13,18 +13,13 @@ public class MyController {
 
     @Autowired
     private MyRepo myRepo;
+    @PostMapping("/")
+    public Mymodel addEmployee(@RequestBody MyDTO mydto){
+        Mymodel data = new Mymodel(mydto);
 
-
-    @GetMapping("/{id}")
-    public String getEmployee(@PathVariable long id) {
-        Optional<Mymodel> data = myRepo.findById(id);
-        String greeting="no Data Found";
-        if (data.isPresent()) {
-            greeting = data.get().getFirstName() + data.get().getLastName() + data.get().getGreeting();
-
-        }
-        return greeting;
+        return myRepo.save(data);
     }
+
 
     @GetMapping("/greeting")
     public String greeting(){
