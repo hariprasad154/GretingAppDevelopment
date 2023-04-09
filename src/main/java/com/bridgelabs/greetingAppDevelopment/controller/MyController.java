@@ -44,12 +44,11 @@ public class MyController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Mymodel delet(@PathVariable long id) {
+    public String delet(@PathVariable long id) {
         Optional<Mymodel> data = myRepo.findById(id);
         if (data.isPresent()) {
             myRepo.deleteById(id);
-            return "The deleting done"
-
+            return "The deleting done" +id;
         }
         return null;
     }
