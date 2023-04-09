@@ -5,6 +5,7 @@ import com.bridgelabs.greetingAppDevelopment.model.Mymodel;
 import com.bridgelabs.greetingAppDevelopment.repository.MyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Service
 public class MyController {
 
     @Autowired
@@ -22,8 +24,21 @@ public class MyController {
         myRepo.findAll().forEach(datas -> data.add(datas));
         return data;
     }
-    public void save(Mymodel data){
+    public void saveorUpdate(MyDTO mydto){
+        Mymodel data = new Mymodel(mydto);
         myRepo.save(data);
+    }
+    @PutMapping("/put/{id}")
+    public Mymodel update(@RequestBody MyDTO mydto ,@PathVariable long id ){
+        Optional<Mymodel> data = myRepo.findById(id);
+        if(data.isPresent()){
+            data.get().setFirstName(mydto.firstName);
+            data.get().setLastName(mydto.lastName);
+            data.get().setGreeting(mydto.greeting);
+
+            return myRepo.save(data.get());
+        }
+        return null;
     }
 
 
@@ -37,6 +52,8 @@ public class MyController {
 
         return myRepo.save(data);
     }
+
+
 
 
     @GetMapping("/greeting")
