@@ -19,24 +19,37 @@ public class MyController {
     @Autowired
     private MyRepo myRepo;
 
-    public List<Mymodel> getalldata(){
-        List<Mymodel> data=new ArrayList<>();
+    public List<Mymodel> getalldata() {
+        List<Mymodel> data = new ArrayList<>();
         myRepo.findAll().forEach(datas -> data.add(datas));
         return data;
     }
-    public void saveorUpdate(MyDTO mydto){
+
+    public void saveorUpdate(MyDTO mydto) {
         Mymodel data = new Mymodel(mydto);
         myRepo.save(data);
     }
+
     @PutMapping("/put/{id}")
-    public Mymodel update(@RequestBody MyDTO mydto ,@PathVariable long id ){
+    public Mymodel update(@RequestBody MyDTO mydto, @PathVariable long id) {
         Optional<Mymodel> data = myRepo.findById(id);
-        if(data.isPresent()){
+        if (data.isPresent()) {
             data.get().setFirstName(mydto.firstName);
             data.get().setLastName(mydto.lastName);
             data.get().setGreeting(mydto.greeting);
 
             return myRepo.save(data.get());
+        }
+        return null;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public Mymodel delet(@PathVariable long id) {
+        Optional<Mymodel> data = myRepo.findById(id);
+        if (data.isPresent()) {
+            myRepo.deleteById(id);
+            return "The deleting done"
+
         }
         return null;
     }
