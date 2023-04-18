@@ -13,6 +13,9 @@ public class Mymodel {
         this.lastName = mydto.lastName;
         this.greeting = mydto.greeting;
     }
+    public Mymodel(){
+
+    }
 
     public long getId() {
         return Id;
